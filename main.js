@@ -1,7 +1,10 @@
 const discord = require('discord.js');
 const fs = require('fs');
+const { env } = require('process');
 const { MessageIds, RoleIds } = require('./commands/constants.js');
 const { processReactionColor } = require('./commands/general/embeds/reactionColor');
+
+require('dotenv').config();
 
 const prefix = ';';
 const client = new discord.Client({partials: ["MESSAGE", "CHANNEL", "REACTION" ]});
@@ -149,4 +152,5 @@ function getCommand(typedCmd)
     return cmd;
 }
 
-client.login('NjUyMzIzNjEzMDk3MDY2NTE2.XemxtA.dd3EzYX0hHV57UYv-S8cejtlhVs');
+let token = process.env.DISCORD_BOT_TOKEN;
+client.login(token);
