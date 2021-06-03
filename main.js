@@ -3,6 +3,7 @@ const fs = require('fs');
 const { env } = require('process');
 const { MessageIds, RoleIds } = require('./commands/constants.js');
 const { processReactionColor } = require('./commands/general/embeds/reactionColor');
+const { ArgumentManager } = require('./commands/arguments.js');
 
 require('dotenv').config();
 
@@ -32,9 +33,10 @@ client.on('message', message => {
         return;
 
     const args = message.content.slice(prefix.length).split(/ +/);
-    const command = args.shift().toLowerCase();
 
+    const command = args.shift().toLowerCase();
     const cmd = getCommand(command);
+
     if (cmd !== undefined)
     {
         if (!hasPermission(message.member, cmd))
@@ -49,11 +51,12 @@ client.on('message', message => {
 
         try
         {
-            cmd.execute(message, args, discord, client);
+            const argManager = new ArgumentManager(args);
+            cmd.execute(message, argManager, discord, client);
         }
         catch (error)
         {
-            console.log(error);
+            message.channel.send(error);
         }
     }
     else

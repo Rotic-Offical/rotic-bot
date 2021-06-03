@@ -2,7 +2,6 @@ const https = require('https');
 const { RoleIds } = require("../constants.js");
 
 let options = {
-    hostname: 'https://api.yomomma.info/',
     headers: {
         'User-Agent': 'Otasky',
         'Accept': 'text/plain'
@@ -18,9 +17,16 @@ module.exports = {
     execute(message, args, discord, client)
     {
         let joke = '';
+        let jokeApiUrl = '';
 
+        args.on('dad', 0, false, () => {
+            jokeApiUrl = 'https://icanhazdadjoke.com/';
+        })
+        .on('yomomma', 0, false, () => {
+            jokeApiUrl = 'https://api.yomomma.info/';
+        }).parse();
 
-        https.get(options, (res) => {
+        https.get(jokeApiUrl, options, (res) => {
             res.on('data', (chunk) => {
                 joke += chunk;
             });
